@@ -4,7 +4,7 @@ weather_api_key = "e9d7239a61fade4678c26fe1059913d3"
 
 city = "Taganrog"
 
-url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={weather_api_key}'
+url = f'http://api.openweathermap.org/data/2.5/forecast?q={city}&appid={weather_api_key}&lang=ru'
 
 res = requests.get(url)
 data = res.json()
