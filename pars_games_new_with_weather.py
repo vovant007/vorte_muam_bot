@@ -116,8 +116,23 @@ def parcer():
         if 'Форте Таганрог' in i:
             forte.append(i)
     return forte
+
+
+def right_forte():
+    forte = parcer()
+    forte_new = []
+    for i in forte:
+        input_date_str = i[:12]
+        now = datetime.now()
+        input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
+        diff = input_date - now
+        if diff.total_seconds() > 0:
+            forte_new.append(i)
+    return forte_new
+
+
 def turs(n):
-    forte=parcer()
+    forte=right_forte()
     s=''
     try:
         for i in range(n):
@@ -128,8 +143,8 @@ def turs(n):
 
 
 def date():
-    forte=parcer()
-    s=forte[1]
+    forte=right_forte()
+    s=forte[0]
     input_date_str=s[:12]
     now = datetime.now()
     input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
@@ -139,19 +154,15 @@ def date():
 def weather():
     input_date = date()[1]
     input_date = int(time.mktime(time.strptime(str(input_date), '%Y-%m-%d %H:%M:%S')))
-    d = parcer()
+    d = right_forte()
     if (input_date - int(time.time() // 1) <= 3600*3) and (input_date - int(time.time() // 1) > 0):
         for forecast in data['list']:
             if forecast['dt'] - input_date <= 3600*3:
-                d[1] = d[1] + f"\nВремя: {forecast['dt_txt']}, Температура воздуха: {round(forecast['main']['temp'])} °C, Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с, Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст., Влажность: {forecast['main']['humidity']} %, Погода: {forecast['weather'][0]['description']}\n\n"
-                print(d[1])
+                d[0] = d[0] + f"\nВремя: {forecast['dt_txt']}, Температура воздуха: {round(forecast['main']['temp'])} °C, Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с, Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст., Влажность: {forecast['main']['humidity']} %, Погода: {forecast['weather'][0]['description']}\n\n"
             elif forecast['dt'] - input_date >= 3600*3 and forecast['dt'] - input_date <= 3600*5:
-                d[1] = d[1] + f"\nВремя: {forecast['dt_txt']}, Температура воздуха: {round(forecast['main']['temp'])} °C, Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с, Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст., Влажность: {forecast['main']['humidity']} %, Погода: {forecast['weather'][0]['description']}\n\n"
-                print(d[1])
+                d[0] = d[0] + f"\nВремя: {forecast['dt_txt']}, Температура воздуха: {round(forecast['main']['temp'])} °C, Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с, Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст., Влажность: {forecast['main']['humidity']} %, Погода: {forecast['weather'][0]['description']}\n\n"
             else:
                 pass
     else:
         pass
-    return d[1]
-
-print(weather())
+    return d
