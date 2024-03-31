@@ -114,7 +114,7 @@ for event in VkLongPoll(session).listen():
             num_tours = int(text)
             send_message(user_id,turs(num_tours))
         if text=='расписание кубка россии':
-            send_message(user_id,turs_cubok(1))
+            send_message(user_id,'К сожалению, ФК Форте закончил участие в Кубке России 2023-2024')
 
 
 
@@ -130,10 +130,9 @@ for event in VkLongPoll(session).listen():
                          'Здесь вы можете узнать время до ближайшего матча Форте',
                          keyboard_data)
         if text=='время до матча в фнл-2':
-            send_message(user_id,date())
-            print(date())
+            send_message(user_id,date()[0])
         if text=='время до матча в кубке россии':
-            send_message(user_id,date_cubok())
+            send_message(user_id,'К сожалению, ФК Форте закончил участие в Кубке России 2023-2024')
         if text=='полезные ссылки':
             keyboard_links = VkKeyboard()
             keyboard_links.add_openlink_button('Купить билеты',
@@ -142,6 +141,9 @@ for event in VkLongPoll(session).listen():
             keyboard_links.add_line()
             keyboard_links.add_button('назад',VkKeyboardColor.NEGATIVE)
             send_message(user_id,'Здесь вы можете найти полезную информацию',keyboard_links)
+
+
+
 
 
 
