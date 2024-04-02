@@ -5,12 +5,12 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor, VkKeyboardButton
 #from pars_games import turs,date
 from parcer_cubok import  turs_cubok,date_cubok
-from  pars_games_new import date,turs
+from  pars_games_new_with_weather import date,turs
 session = vk_api.VkApi(token=vk_token)
 bot_api = session.get_api()
 import requests
 from parcer_shop import parcer__shop
-
+from rand_line import facts
 
 def send_photo(user_id, url):
     upload_url = session.method("photos.getMessagesUploadServer", {"peer_id": user_id})["upload_url"]
@@ -119,7 +119,7 @@ for event in VkLongPoll(session).listen():
 
 
         if text == 'факты о форте':
-            send_message(user_id, 'Факт 1: Футбольный клуб Форт был основан в 2005 году.')
+            send_message(user_id, facts())
         if text == 'время до матча':
             keyboard_data = VkKeyboard()
             keyboard_data.add_button("Время до матча в ФНЛ-2", VkKeyboardColor.PRIMARY)
@@ -141,6 +141,12 @@ for event in VkLongPoll(session).listen():
             keyboard_links.add_line()
             keyboard_links.add_button('назад',VkKeyboardColor.NEGATIVE)
             send_message(user_id,'Здесь вы можете найти полезную информацию',keyboard_links)
+
+
+
+
+
+
 
 
 
