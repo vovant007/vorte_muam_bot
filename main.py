@@ -1,16 +1,16 @@
 import vk_api
-import requests
 from bot_token import vk_token
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor, VkKeyboardButton
-#from pars_games import turs,date
-from parcer_cubok import  turs_cubok,date_cubok
 from  pars_games_new_with_weather import date,turs
-session = vk_api.VkApi(token=vk_token)
-bot_api = session.get_api()
 import requests
 from parcer_shop import parcer__shop
 from rand_line import facts
+from result_table import table
+
+session = vk_api.VkApi(token=vk_token)
+bot_api = session.get_api()
+
 
 def send_photo(user_id, url):
     upload_url = session.method("photos.getMessagesUploadServer", {"peer_id": user_id})["upload_url"]
@@ -104,6 +104,7 @@ for event in VkLongPoll(session).listen():
             keyboard_raspis.add_button("Расписание ФНЛ-2", VkKeyboardColor.PRIMARY)
             keyboard_raspis.add_button('Расписание кубка России', VkKeyboardColor.PRIMARY)
             keyboard_raspis.add_line()
+            keyboard_raspis.add_button('Таблица первенства ФНЛ 2', VkKeyboardColor.PRIMARY)
             keyboard_raspis.add_button('назад',VkKeyboardColor.NEGATIVE)
             send_message(user_id,
                          'В разделе "расписание" вы можете узнать расписание игры ФК Форте.',
@@ -141,6 +142,14 @@ for event in VkLongPoll(session).listen():
             keyboard_links.add_line()
             keyboard_links.add_button('назад',VkKeyboardColor.NEGATIVE)
             send_message(user_id,'Здесь вы можете найти полезную информацию',keyboard_links)
+        if text=='таблица первенства фнл 2':
+            send_message(user_id,table())
+
+
+
+
+
+
 
 
 
