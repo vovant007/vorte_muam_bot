@@ -119,15 +119,20 @@ def parcer():
 
 
 def right_forte():
-    forte = parcer()
+    forte = parcer()[1::]
     forte_new = []
-    for i in forte:
-        input_date_str = i[:12]
-        now = datetime.now()
-        input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
-        diff = input_date - now
-        if diff.total_seconds() > 0:
+    try:
+        for i in forte:
+            input_date_str = i[:12]
+            now = datetime.now()
+            input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
+            diff = input_date - now
+            if diff.total_seconds() > 0:
+                forte_new.append(i)
+    except ValueError:
+        for i in forte:
             forte_new.append(i)
+
     return forte_new
 
 
@@ -143,13 +148,20 @@ def turs(n):
 
 
 def date():
-    forte=right_forte()
-    s=forte[0]
-    input_date_str=s[:12]
     now = datetime.now()
-    input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
-    diff = input_date - now
-    return f"До ближайшего матча осталось: {diff.days} д., {diff.seconds // 3600} ч., {diff.seconds // 60 % 60} м.", input_date
+    try:
+        forte = right_forte()
+        s = forte[0]
+        input_date_str = s[:12]
+        input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
+        diff = input_date - now
+        return f"До ближайшего матча осталось: {diff.days} д., {diff.seconds // 3600} ч., {diff.seconds // 60 % 60} м.",input_date
+    except ValueError:
+        input_date_str = now.strftime("%d.%m") + f", {s[:5]}"
+        # Parse the new datetime string
+        input_date = datetime.strptime(input_date_str + f".{now.year}", "%d.%m, %H:%M.%Y")
+        diff = input_date - now
+        return f"До ближайшего матча осталось: {diff.days} д., {diff.seconds // 3600} ч., {diff.seconds // 60 % 60} м.",input_date
 
 def weather():
     input_date = date()[1]
@@ -166,3 +178,4 @@ def weather():
     else:
         pass
     return d
+
