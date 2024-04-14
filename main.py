@@ -78,6 +78,7 @@ for event in VkLongPoll(session).listen():
         keyboard.add_button('Время до матча', VkKeyboardColor.POSITIVE)
         keyboard.add_line()
         keyboard.add_button('Полезные ссылки',VkKeyboardColor.POSITIVE)
+        keyboard.add_button("Куда можно сходить?", VkKeyboardColor.POSITIVE)
         #keyboard.add_openlink_button('Расположение Форте Арены','https://yandex.ru/maps/971/taganrog/?ll=38.888405%2C47.204483&mode=poi&poi%5Bpoint%5D=38.888707%2C47.204746&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D94197634997&z=18.89')
 
 
