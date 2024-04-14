@@ -165,12 +165,16 @@ for event in VkLongPoll(session).listen():
                 map1 = map[rnd]
                 send_photo(user_id, urlloc1)
                 send_message(user_id, n1)
+                keyboard_location1.add_openlink_button('Открыть адрес в картах',
+                                                       map1)
+                keyboard_location1.add_line()
+                keyboard_location1.add_button("Да", VkKeyboardColor.PRIMARY)
+                keyboard_location1.add_button('Назад', VkKeyboardColor.NEGATIVE)
+                send_message(user_id, 'Продолжить?', keyboard_location1)
                 random_list.remove(rnd)
                 print(random_list)
             else:
                 send_message(user_id, 'Интересные места закончились')
-
-
 
 
 
