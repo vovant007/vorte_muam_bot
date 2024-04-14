@@ -5,6 +5,7 @@ from vk_api.keyboard import VkKeyboard, VkKeyboardColor, VkKeyboardButton
 from  pars_games_new_with_weather import date,turs
 import requests
 import random
+from location import urlloc, n, map
 from parcer_shop import parcer__shop
 from rand_line import facts
 from result_table import table
