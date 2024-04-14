@@ -147,6 +147,13 @@ for event in VkLongPoll(session).listen():
         if text=='таблица первенства фнл 2':
             send_message(user_id,table())
 
+         if text == 'куда можно сходить?':
+            keyboard_location = VkKeyboard()
+            keyboard_location.add_button('Интересные места в городе', VkKeyboardColor.PRIMARY)
+            keyboard_location.add_button('назад', VkKeyboardColor.NEGATIVE)
+            send_message(user_id,
+                         'В этом разделе вы можете узнать адреса интересных мест в городе',
+                         keyboard_location)
         if text == 'интересные места в городе' or text == 'да':
             keyboard_location1 = VkKeyboard()
             rnd = random.randint(0, 11)
