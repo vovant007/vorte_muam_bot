@@ -4,6 +4,7 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor, VkKeyboardButton
 from  pars_games_new_with_weather import date,turs
 import requests
+import random
 from parcer_shop import parcer__shop
 from rand_line import facts
 from result_table import table
@@ -145,7 +146,20 @@ for event in VkLongPoll(session).listen():
         if text=='таблица первенства фнл 2':
             send_message(user_id,table())
 
-
+        if text == 'интересные места в городе' or text == 'да':
+            keyboard_location1 = VkKeyboard()
+            rnd = random.randint(0, 11)
+            n1 = n[rnd]
+            urlloc1 = urlloc[rnd]
+            map1 = map[rnd]
+            send_photo(user_id, urlloc1)
+            send_message(user_id, n1)
+            keyboard_location1.add_openlink_button('Открыть адрес в картах',
+                                               map1)
+            keyboard_location1.add_line()
+            keyboard_location1.add_button("Да", VkKeyboardColor.PRIMARY)
+            keyboard_location1.add_button('Назад', VkKeyboardColor.NEGATIVE)
+            send_message(user_id, 'Продолжить?', keyboard_location1)
 
 
 
