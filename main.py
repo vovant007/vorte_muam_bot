@@ -12,7 +12,7 @@ from result_table import table
 
 session = vk_api.VkApi(token=vk_token)
 bot_api = session.get_api()
-
+random_list = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
 def send_photo(user_id, url):
     upload_url = session.method("photos.getMessagesUploadServer", {"peer_id": user_id})["upload_url"]
@@ -148,27 +148,28 @@ for event in VkLongPoll(session).listen():
         if text=='таблица первенства фнл 2':
             send_message(user_id,table())
 
-         if text == 'куда можно сходить?':
+        if text == 'куда можно сходить?':
             keyboard_location = VkKeyboard()
             keyboard_location.add_button('Интересные места в городе', VkKeyboardColor.PRIMARY)
             keyboard_location.add_button('назад', VkKeyboardColor.NEGATIVE)
             send_message(user_id,
                          'В этом разделе вы можете узнать адреса интересных мест в городе',
                          keyboard_location)
+
         if text == 'интересные места в городе' or text == 'да':
             keyboard_location1 = VkKeyboard()
-            rnd = random.randint(0, 11)
-            n1 = n[rnd]
-            urlloc1 = urlloc[rnd]
-            map1 = map[rnd]
-            send_photo(user_id, urlloc1)
-            send_message(user_id, n1)
-            keyboard_location1.add_openlink_button('Открыть адрес в картах',
-                                               map1)
-            keyboard_location1.add_line()
-            keyboard_location1.add_button("Да", VkKeyboardColor.PRIMARY)
-            keyboard_location1.add_button('Назад', VkKeyboardColor.NEGATIVE)
-            send_message(user_id, 'Продолжить?', keyboard_location1)
+            if len(random_list) != 0:
+                rnd = random.choice(random_list)
+                n1 = n[rnd]
+                urlloc1 = urlloc[rnd]
+                map1 = map[rnd]
+                send_photo(user_id, urlloc1)
+                send_message(user_id, n1)
+                random_list.remove(rnd)
+                print(random_list)
+            else:
+                send_message(user_id, 'Интересные места закончились')
+
 
 
 
