@@ -119,7 +119,7 @@ def parcer():
 
 
 def right_forte():
-    forte = parcer()[1::]
+    forte = parcer()
     forte_new = []
     try:
         for i in forte:
@@ -134,7 +134,6 @@ def right_forte():
             forte_new.append(i)
 
     return forte_new
-
 
 def turs(n):
     forte=right_forte()
@@ -178,4 +177,5 @@ def weather():
     else:
         pass
     return d
+
 
