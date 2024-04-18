@@ -172,7 +172,6 @@ for event in VkLongPoll(session).listen():
                 keyboard_location1.add_button('Назад', VkKeyboardColor.NEGATIVE)
                 send_message(user_id, 'Продолжить?', keyboard_location1)
                 random_list.remove(rnd)
-                print(random_list)
             else:
                 send_message(user_id, 'Интересные места закончились')
 
