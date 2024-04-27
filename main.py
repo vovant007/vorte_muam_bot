@@ -2,7 +2,7 @@ import vk_api
 from bot_token import vk_token
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor, VkKeyboardButton
-from  pars_games_new_with_weather import date,turs
+from  pars_games_new_with_weather import date,turs,weather
 import requests
 import random
 from location import urlloc, n, map
@@ -135,6 +135,7 @@ for event in VkLongPoll(session).listen():
                          keyboard_data)
         if text=='время до матча в фнл-2':
             send_message(user_id,date()[0])
+            send_message(user_id,weather())
         if text=='время до матча в кубке россии':
             send_message(user_id,'К сожалению, ФК Форте закончил участие в Кубке России 2023-2024')
         if text=='полезные ссылки':

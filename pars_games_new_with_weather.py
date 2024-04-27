@@ -10,6 +10,15 @@ city = "Taganrog"
 url = f'https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={weather_api_key}&units=metric&lang=ru'
 res = requests.get(url)
 data = res.json()
+code_to_smile = {
+     "ясно": "Ясно ☀️",
+     "облачно": "Облачно ☁️",
+     "дождь": "Дождь 🌧️",
+     "гроза": "Гроза ⛈️",
+     "снег": "Снег 🌨️",
+     "туман": "Туман 🌫️",
+     "пасмурно": "Пасмурно ☁️"
+}
 
 def parcer():
     url = 'https://soccer365.ru/competitions/2205/'
@@ -135,15 +144,7 @@ def right_forte():
 
     return forte_new
 
-def turs(n):
-    forte=right_forte()
-    s=''
-    try:
-        for i in range(n):
-            s += forte[i] + '\n'
-        return s
-    except:
-        return 'Невозможное кол-во туров'
+
 
 
 def date():
@@ -169,13 +170,29 @@ def weather():
     if (input_date - int(time.time() // 1) <= 3600*3) and (input_date - int(time.time() // 1) > 0):
         for forecast in data['list']:
             if forecast['dt'] - input_date <= 3600*3:
-                d[0] = d[0] + f"\nВремя: {forecast['dt_txt']}, Температура воздуха: {round(forecast['main']['temp'])} °C, Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с, Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст., Влажность: {forecast['main']['humidity']} %, Погода: {forecast['weather'][0]['description']}\n\n"
+                d[0] = d[0] + f"\n\n⌚ Время: {forecast['dt_txt']}\n🌡️ Температура воздуха: {round(forecast['main']['temp'])} °C\n🌬️ Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с\n💢 Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст.\n💦 Влажность: {forecast['main']['humidity']} %"
+                if forecast['weather'][0]['description'] in code_to_smile:
+                    d[0] = d[0] + "\n📊 Погода: " + code_to_smile[forecast['weather'][0]['description']] + "\n\n"
+                else:
+                    d[0] = d[0] + f"\n📊 Данные о погоде недоступны\n\n"
             elif forecast['dt'] - input_date >= 3600*3 and forecast['dt'] - input_date <= 3600*5:
-                d[0] = d[0] + f"\nВремя: {forecast['dt_txt']}, Температура воздуха: {round(forecast['main']['temp'])} °C, Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с, Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст., Влажность: {forecast['main']['humidity']} %, Погода: {forecast['weather'][0]['description']}\n\n"
+                d[0] = d[0] + f"\n\n⌚ Время: {forecast['dt_txt']}\n🌡️ Температура воздуха: {round(forecast['main']['temp'])} °C\n🌬️ Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с\n💢 Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст.\n💦 Влажность: {forecast['main']['humidity']} %"
+                if forecast['weather'][0]['description'] in code_to_smile:
+                    d[0] = d[0] + "\n📊 Погода: " + code_to_smile[forecast['weather'][0]['description']] + "\n\n"
+                else:
+                    d[0] = d[0] + "\n📊 Данные о погоде недоступны\n\n"
             else:
                 pass
     else:
         pass
     return d
 
-
+def turs(n):
+    forte=weather()
+    s=''
+    try:
+        for i in range(n):
+            s += forte[i] + '\n'
+        return s
+    except:
+        return 'Невозможное кол-во туров'
