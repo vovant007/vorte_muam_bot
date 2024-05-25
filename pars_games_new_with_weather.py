@@ -167,25 +167,29 @@ def weather():
     input_date = date()[1]
     input_date = int(time.mktime(time.strptime(str(input_date), '%Y-%m-%d %H:%M:%S')))
     d = right_forte()
-    if (input_date - int(time.time() // 1) <= 3600*3) and (input_date - int(time.time() // 1) > 0):
-        for forecast in data['list']:
-            if forecast['dt'] - input_date <= 3600*3:
-                d[0] = d[0] + f"\n\n⌚ Время: {forecast['dt_txt']}\n🌡️ Температура воздуха: {round(forecast['main']['temp'])} °C\n🌬️ Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с\n💢 Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст.\n💦 Влажность: {forecast['main']['humidity']} %"
-                if forecast['weather'][0]['description'] in code_to_smile:
-                    d[0] = d[0] + "\n📊 Погода: " + code_to_smile[forecast['weather'][0]['description']] + "\n\n"
+    flag = d[0]
+    if flag[14] == "Ф":
+        if (input_date - int(time.time() // 1) <= 3600*3) and (input_date - int(time.time() // 1) > 0):
+            for forecast in data['list']:
+                if forecast['dt'] - input_date <= 3600*3:
+                    d[0] = d[0] + f"\n\n⌚ Время: {forecast['dt_txt']}\n🌡️ Температура воздуха: {round(forecast['main']['temp'])} °C\n🌬️ Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с\n💢 Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст.\n💦 Влажность: {forecast['main']['humidity']} %"
+                    if forecast['weather'][0]['description'] in code_to_smile:
+                        d[0] = d[0] + "\n📊 Погода: " + code_to_smile[forecast['weather'][0]['description']] + "\n\n"
+                    else:
+                        d[0] = d[0] + f"\n📊 Данные о погоде недоступны\n\n"
+                elif forecast['dt'] - input_date >= 3600*3 and forecast['dt'] - input_date <= 3600*5:
+                    d[0] = d[0] + f"\n\n⌚ Время: {forecast['dt_txt']}\n🌡️ Температура воздуха: {round(forecast['main']['temp'])} °C\n🌬️ Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с\n💢 Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст.\n💦 Влажность: {forecast['main']['humidity']} %"
+                    if forecast['weather'][0]['description'] in code_to_smile:
+                        d[0] = d[0] + "\n📊 Погода: " + code_to_smile[forecast['weather'][0]['description']] + "\n\n"
+                    else:
+                        d[0] = d[0] + "\n📊 Данные о погоде недоступны\n\n"
                 else:
-                    d[0] = d[0] + f"\n📊 Данные о погоде недоступны\n\n"
-            elif forecast['dt'] - input_date >= 3600*3 and forecast['dt'] - input_date <= 3600*5:
-                d[0] = d[0] + f"\n\n⌚ Время: {forecast['dt_txt']}\n🌡️ Температура воздуха: {round(forecast['main']['temp'])} °C\n🌬️ Скорость ветра: {round(forecast['wind']['speed'], 2)} м/с\n💢 Давление: {round(forecast['main']['pressure'] * 0.75)} мм рт. ст.\n💦 Влажность: {forecast['main']['humidity']} %"
-                if forecast['weather'][0]['description'] in code_to_smile:
-                    d[0] = d[0] + "\n📊 Погода: " + code_to_smile[forecast['weather'][0]['description']] + "\n\n"
-                else:
-                    d[0] = d[0] + "\n📊 Данные о погоде недоступны\n\n"
-            else:
-                pass
+                    pass
+        else:
+            pass
+        return d
     else:
-        pass
-    return d
+        return d
 
 def turs(n):
     forte=weather()
