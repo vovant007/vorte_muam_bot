@@ -1,0 +1,94 @@
+import vk_api
+from vk_api.longpoll import VkLongPoll, VkEventType
+from vk_api.utils import get_random_id
+from vk_api import VkUpload
+import requests
+from io import BytesIO
+import time
+
+# Функция для отправки сообщения пользователю
+def send_message(user_id, message, attachment=None):
+    params = {
+        'user_id': user_id,
+        'message': message,
+        'random_id': get_random_id()
+    }
+    if attachment:
+        params['attachment'] = attachment
+    authorize.method('messages.send', params)
+
+# Функция для получения числового идентификатора пользователя по строковому
+def get_numeric_id(screen_name):
+    response = authorize.method('utils.resolveScreenName', {'screen_name': screen_name})
+    if response and 'object_id' in response:
+        return response['object_id']
+    return None
+
+# Функция для загрузки фото и получения строки для вложения
+def upload_photo(photo_url):
+    response = requests.get(photo_url)
+    photo = BytesIO(response.content)
+    upload = VkUpload(vk_session)
+    photo = upload.photo_messages(photos=photo)[0]
+    return 'photo{}_{}'.format(photo['owner_id'], photo['id'])
+
+# Функция для рассылки сообщения всем пользователям из списка
+def broadcast_message(message, photo_url=None):
+    attachment = upload_photo(photo_url) if photo_url else None
+    for user_id in list_of_users:
+        send_message(user_id, message, attachment)
+
+# Замените 'your_token_here' на ваш реальный токен VK API
+token = "vk1.a.Cy7_QUlasfLSbasfbT2W0kv46ZXsaf2cRfi1oyBgNnSA3TBwPhy2M3asf0p5Ytgvt2YI1e_6XixEuBasfwZJ_2m-ajuUXjdssfdsvasfRTF009w-VWBwLGasfZhsdf3cRCGBIN2ZafafdfdsfdsfdsfdsfaBnA8VdVsafhghrBXsSNtddsfsdfffasfsd"
+authorize = vk_api.VkApi(token=token)
+vk_session = vk_api.VkApi(token=token)
+vk = vk_session.get_api()
+longpoll = VkLongPoll(authorize)
+list_of_users = []
+
+# Замените 'admin_screen_name_here' на строковый идентификатор администратора
+admin_screen_name = 'УКАЗАТЬ СЮДА ID ADMINA'
+admin_id = get_numeric_id(admin_screen_name)
+
+if admin_id is None:
+    print("Не удалось получить числовой идентификатор администратора.")
+else:
+    for event in longpoll.listen():
+        if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+            received_message = event.text
+            sender = event.user_id
+            if received_message.lower() == "привет":
+                send_message(sender, "Добрый день")
+                if sender not in list_of_users:
+                    list_of_users.append(sender)
+                    send_message(sender, "Я записал вас в свой список пользователей!")
+                else:
+                    send_message(sender, "Ваше имя уже есть в списке пользователей")
+            elif received_message.lower() == "пока":
+                send_message(sender, "До свидания")
+            elif received_message.lower() == "рассылка":
+                if sender == admin_id:
+                    send_message(sender, "Введите текст сообщения для рассылки")
+                    for event in longpoll.listen():
+                        if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+                            broadcast_message_text = event.text
+                            send_message(sender, "Включить фото к сообщению? (да/нет)")
+                            for event in longpoll.listen():
+                                if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+                                    if event.text.lower() == "да":
+                                        send_message(sender, "Введите URL фотографии:")
+                                        for event in longpoll.listen():
+                                            if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
+                                                photo_url = event.text
+                                                broadcast_message(broadcast_message_text, photo_url)
+                                                send_message(sender, "Рассылка завершена.")
+                                                break
+                                    elif event.text.lower() == "нет":
+                                        broadcast_message(broadcast_message_text)
+                                        send_message(sender, "Рассылка завершена без фото.")
+                                    break
+                            break
+                else:
+                    send_message(sender, "У вас нет прав для рассылки сообщений")
+            else:
+                send_message(sender, "Я вас не понимаю...")
